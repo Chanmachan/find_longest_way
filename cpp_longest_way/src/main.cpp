@@ -13,9 +13,10 @@ int main(int argc, char* argv[]) {
 	try {
 		std::string filename = argv[1];
 		auto validated_data = load_map(filename);
-		for (const auto& edge : validated_data) {
-			std::cout << "Edge from " << edge.start << " to " << edge.end << " with distance " << edge.distance << '\n';
-		}
+		Graph graph = create_graph(validated_data);
+		write_graph_to_dot(graph, "output.dot");
+		std::cout << "Graph has been created with " << num_vertices(graph) << " vertices and "
+				  << num_edges(graph) << " edges.\n";
 	} catch (const std::exception& e) {
 		std::cerr << "Error: " << e.what() << '\n';
 		return 1;

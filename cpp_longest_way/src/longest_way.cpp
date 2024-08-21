@@ -26,7 +26,6 @@ std::vector<edge_t> validate_map_format(const std::string& input_map) {
 
 		while (getline(lineStream, token, ',')) {
 			skip_space(token);
-			std::cout << token << std::endl;
 			tokens.push_back(token);
 		}
 
@@ -78,4 +77,20 @@ std::vector<edge_t> load_map(const std::string& filename) {
 	}
 
 	return validate_map_format(lines);
+}
+
+Graph create_graph(const std::vector<edge_t>& edges) {
+	Graph graph;
+	for (const auto& edge : edges) {
+		add_edge(edge.start, edge.end, boost::property<boost::edge_weight_t, double>(edge.distance), graph);
+	}
+	return graph;
+}
+
+void write_graph_to_dot(const Graph& graph, const std::string& filename) {
+	std::ofstream dot_file(filename);
+	auto weight_map = get(boost::edge_weight, graph);
+	edge_writer<decltype(weight_map)> writer(weight_map);
+
+	boost::write_graphviz(dot_file, graph, boost::default_writer(), writer);
 }
