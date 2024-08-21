@@ -3,42 +3,42 @@ import sys
 
 
 def validate_map_format(input_map):
+    validated_data = []
     for line in input_map.splitlines():
         token = line.split(',')
+        if len(token) != 3:
+            print('Invalid map format: too many inputs in one line')
+            return None
+        start, end, distance = token[0].strip(), token[1].strip(), token[2].strip()
+        if not (start.isdecimal() and end.isdecimal()):
+            print('Invalid map format: ID must be integers')
+            return None
+        if 7 < len(start) or 7 < len(end):
+            print('Invalid map format: ID is too large')
+            return None
         try:
-            if len(token) != 3:
-                raise ValueError('too many inputs in one line')
-            start, end, distance = token[0].strip(), token[1].strip(), token[2].strip()
-            if not (start.isdecimal() and end.isdecimal()):
-                raise ValueError('ID must be integers')
-            # 大きさは9999999を最大値にする
-            if 7 < len(start) or 7 < len(end):
-                raise ValueError('ID is too large')
-            if distance.isdecimal():
-                if 7 < len(distance):
-                    raise ValueError('distance is too large')
-            elif float(distance):
-                splited = distance.split('.')
-                if 7 < len(splited[0]):
-                    raise ValueError('integer part of distance is too large')
-                elif 2 < len(splited[1]):
-                    raise ValueError('fractional part of distance is too large')
-        except ValueError as e:
-            print(f'Invalid map format: {e}')
-            return False
-    if not (input_map.endswith('\n') or input_map.endswith('\r\n')):
-        print('Invalid map format: file does not end with a newline')
-        return False
-    return True
+            dist = float(distance)
+            if distance.isdecimal() and 7 < len(distance):
+                print('Invalid map format: distance is too large')
+                return None
+            if not distance.isdecimal() and (7 < len(distance.split('.')[0]) or 2 < len(distance.split('.')[1])):
+                print('Invalid map format: part of distance is too large')
+                return None
+            validated_data.append((int(start), int(end), dist))
+        except ValueError:
+            print(f'Invalid map format: {distance} is not a float')
+            return None
+    return validated_data
 
 
 def load_map(filename):
     try:
         with open(filename, 'r') as f:
             lines = f.read()
-        if not validate_map_format(lines):
+        validated_data = validate_map_format(lines)
+        if validated_data is None:
             return None
-        return lines
+        return validated_data
     except FileNotFoundError:
         print(f"Error: File '{filename}' not found.")
         return None
@@ -52,9 +52,10 @@ def main():
         print('Error: one input file needed')
         return
     filename = sys.argv[1]
-    map_data = load_map(filename)
-    if map_data:
-        print(map_data)
+    validated_data = load_map(filename)
+    if validated_data is None:
+        return
+    print(validated_data)
 
 
 if __name__ == "__main__":
