@@ -10,6 +10,7 @@ def create_graph(validated_data):
     return graph
 
 
+# 双方向の場合、距離が描画されるのは片方のみ
 def draw_graph(graph):
     pos = nx.spring_layout(graph)
     edge_labels = nx.get_edge_attributes(graph, 'weight')
