@@ -1,6 +1,12 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import sys
+import signal
+
+
+def signal_handler(sig, frame):
+    print('Ctrl+C pressed')
+    sys.exit(127)
 
 
 def create_graph(validated_data):
@@ -101,6 +107,7 @@ def main():
     debug_mode = False
     if '--debug' in sys.argv:
         debug_mode = True
+        signal.signal(signal.SIGINT, signal_handler)
         sys.argv.remove('--debug')
 
     if len(sys.argv) != 2:
