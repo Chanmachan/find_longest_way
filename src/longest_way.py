@@ -27,24 +27,25 @@ def draw_graph(graph):
 
 def find_longest_path_in_graph(graph):
     # 深さ優先探索
-    def dfs(node, visited, path_length):
+    def dfs(node, visited, path_length, path):
         visited.add(node)
         max_length = path_length
-        max_path = [node]
+        max_path = path + [node]
         for neighbor, data in graph[node].items():
             if neighbor not in visited:
-                current_length, current_path = dfs(neighbor, visited, path_length + data['weight'])
-                max_length = current_length
-                max_path = [node] + current_path
+                current_length, current_path = dfs(neighbor, visited, path_length + data['weight'], path + [node])
+                # 最長片道切符の旅なので距離が同じなものがあった場合、一応経由ポイントが長い方を保持
+                if current_length > max_length or (current_length == max_length and len(current_path) > len(max_path)):
+                    max_length = current_length
+                    max_path = current_path
         visited.remove(node)
         return max_length, max_path
 
     longest_path = []
-    # 負の無限大に設定することで必ず初回でmax_distanceが更新される
     max_distance = float('-inf')
     for node in graph.nodes():
-        distance, path = dfs(node, set(), 0)
-        if distance > max_distance:
+        distance, path = dfs(node, set(), 0, [])
+        if distance > max_distance or (distance == max_distance and len(path) > len(longest_path)):
             max_distance = distance
             longest_path = path
     return longest_path, max_distance
