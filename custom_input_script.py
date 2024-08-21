@@ -16,4 +16,4 @@ def generate_graph_data(num_nodes, num_edges, max_weight=10.0):
 
 
 # Parameters: number of nodes, number of edges, maximum weight of edges
-generate_graph_data(6, 10, 10.0)
+generate_graph_data(50, 100, 10.0)
