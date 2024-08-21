@@ -1,5 +1,21 @@
 import networkx as nx
+import matplotlib.pyplot as plt
 import sys
+
+
+def create_graph(validated_data):
+    graph = nx.DiGraph()
+    for start, end, distance in validated_data:
+        graph.add_edge(start, end, weight=distance)
+    return graph
+
+
+def draw_graph(graph):
+    pos = nx.spring_layout(graph)
+    edge_labels = nx.get_edge_attributes(graph, 'weight')
+    nx.draw(graph, pos, with_labels=True, node_color='skyblue', node_size=2000, edge_color='k', linewidths=1, font_size=15)
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels={e: f"{w:.2f}" for e, w in edge_labels.items()})
+    plt.show()
 
 
 def validate_map_format(input_map):
@@ -56,6 +72,8 @@ def main():
     if validated_data is None:
         return
     print(validated_data)
+    graph = create_graph(validated_data)
+    draw_graph(graph)
 
 
 if __name__ == "__main__":
