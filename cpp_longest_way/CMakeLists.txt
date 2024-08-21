@@ -10,3 +10,6 @@ add_executable(find_longest_way
 add_library(test_library src/longest_way.cpp)
 
 add_subdirectory(test)
+
+enable_testing()
+add_test(NAME TestName COMMAND exe_test)
