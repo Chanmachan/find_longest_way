@@ -18,6 +18,33 @@ def draw_graph(graph):
     plt.show()
 
 
+def find_longest_path_in_graph(graph):
+    # 深さ優先探索
+    def dfs(node, visited, path_length):
+        visited.add(node)
+        max_length = path_length
+        max_path = [node]
+        for neighbor, data in graph[node].items():
+            if neighbor not in visited:
+                current_length, current_path = dfs(neighbor, visited, path_length + data['weight'])
+                if current_length > max_length:
+                    max_length = current_length
+                    max_path = [node] + current_path
+        visited.remove(node)
+        return max_length, max_path
+
+    longest_path = []
+    # 負の無限大に設定することで必ず初回でmax_distanceが更新される
+    max_distance = float('-inf')
+    for node in graph.nodes():
+        distance, path = dfs(node, set(), 0)
+        if distance > max_distance:
+            max_distance = distance
+            longest_path = path
+    return longest_path, max_distance
+
+
+# 数値は9999999を最大値に設定
 def validate_map_format(input_map):
     validated_data = []
     for line in input_map.splitlines():
