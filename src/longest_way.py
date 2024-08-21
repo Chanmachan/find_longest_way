@@ -32,21 +32,29 @@ def validate_map_format(input_map):
     return True
 
 
+def load_map(filename):
+    try:
+        with open(filename, 'r') as f:
+            lines = f.read()
+        if not validate_map_format(lines):
+            return None
+        return lines
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
+        return None
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return None
+
+
 def main():
     if len(sys.argv) != 2:
         print('Error: one input file needed')
         return
     filename = sys.argv[1]
-    try:
-        with open(filename, 'r') as f:
-            lines = f.read()
-        if not validate_map_format(lines):
-            return
-    except FileNotFoundError:
-        print(f"Error: File '{filename}' not found.")
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-    print(lines)
+    map_data = load_map(filename)
+    if map_data:
+        print(map_data)
 
 
 if __name__ == "__main__":
