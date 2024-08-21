@@ -12,4 +12,4 @@ add_executable(exe_test tests.cpp)
 target_link_libraries(exe_test ${Boost_LIBRARIES})
 
 # link Boost with code library
-target_link_libraries(exe_test test_library)
+target_link_libraries(exe_test longest_way)
