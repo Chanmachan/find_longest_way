@@ -13,8 +13,8 @@ void skip_space(std::string& str) {
 	}
 }
 
-std::vector<Edge> validate_map_format(const std::string& input_map) {
-	std::vector<Edge> validated_data;
+std::vector<edge_t> validate_map_format(const std::string& input_map) {
+	std::vector<edge_t> validated_data;
 	std::set<std::pair<int, int>> added_edges;
 	std::istringstream iss(input_map);
 	std::string line;
@@ -65,7 +65,7 @@ std::vector<Edge> validate_map_format(const std::string& input_map) {
 	return validated_data;
 }
 
-std::vector<Edge> load_map(const std::string& filename) {
+std::vector<edge_t> load_map(const std::string& filename) {
 	std::ifstream file(filename);
 	if (!file.is_open()) {
 		std::cerr << "Error: File '" << filename << "' not found.\n";
