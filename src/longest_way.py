@@ -27,9 +27,8 @@ def find_longest_path_in_graph(graph):
         for neighbor, data in graph[node].items():
             if neighbor not in visited:
                 current_length, current_path = dfs(neighbor, visited, path_length + data['weight'])
-                if current_length > max_length:
-                    max_length = current_length
-                    max_path = [node] + current_path
+                max_length = current_length
+                max_path = [node] + current_path
         visited.remove(node)
         return max_length, max_path
 
@@ -47,6 +46,7 @@ def find_longest_path_in_graph(graph):
 # 数値は9999999を最大値に設定
 def validate_map_format(input_map):
     validated_data = []
+    added_edges = set()
     for line in input_map.splitlines():
         token = line.split(',')
         if len(token) != 3:
@@ -67,9 +67,15 @@ def validate_map_format(input_map):
             if not distance.isdecimal() and (7 < len(distance.split('.')[0]) or 2 < len(distance.split('.')[1])):
                 print('Invalid map format: part of distance is too large')
                 return None
-            validated_data.append((int(start), int(end), dist))
         except ValueError:
             print(f'Invalid map format: {distance} is not a float')
+            return None
+        edge = (int(start), int(end))
+        if edge not in added_edges:
+            validated_data.append((int(start), int(end), dist))
+            added_edges.add(edge)
+        else:
+            print('Invalid map format: same IDs exist')
             return None
     return validated_data
 
