@@ -1,4 +1,5 @@
 import networkx as nx
+import sys
 
 
 def validate_map_format(input_map):
@@ -25,11 +26,27 @@ def validate_map_format(input_map):
         except ValueError as e:
             print(f'Invalid map format: {e}')
             return False
+    if not (input_map.endswith('\n') or input_map.endswith('\r\n')):
+        print('Invalid map format: file does not end with a newline')
+        return False
     return True
 
 
 def main():
-    print('hoge')
+    if len(sys.argv) != 2:
+        print('Error: one input file needed')
+        return
+    filename = sys.argv[1]
+    try:
+        with open(filename, 'r') as f:
+            lines = f.read()
+        if not validate_map_format(lines):
+            return
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+    print(lines)
 
 
 if __name__ == "__main__":
