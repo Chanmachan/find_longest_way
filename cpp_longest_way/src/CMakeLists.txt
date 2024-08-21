@@ -1,5 +1,6 @@
 set(SOURCE_FILES
         longest_way.cpp
+        longest_way.hpp
         main.cpp)
 
 # 実行ファイルを追加
