@@ -64,6 +64,11 @@ def load_map(filename):
 
 
 def main():
+    debug_mode = False
+    if '--debug' in sys.argv:
+        debug_mode = True
+        sys.argv.remove('--debug')
+
     if len(sys.argv) != 2:
         print('Error: one input file needed')
         return
@@ -71,9 +76,15 @@ def main():
     validated_data = load_map(filename)
     if validated_data is None:
         return
-    print(validated_data)
     graph = create_graph(validated_data)
-    draw_graph(graph)
+    longest_path, max_distance = find_longest_path_in_graph(graph)
+
+    for node in longest_path:
+        print(node)
+
+    if debug_mode:
+        print("Maximum Distance:", max_distance)
+        draw_graph(graph)
 
 
 if __name__ == "__main__":
