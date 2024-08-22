@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
-
+#include <algorithm>
 
 void skip_space(std::string& str) {
 	for (std::string::iterator it = str.begin(); it != str.end(); ++it) {
@@ -30,24 +30,21 @@ std::vector<edge_t> validate_map_format(const std::string& input_map) {
 		}
 
 		if (tokens.size() != 3) {
-			std::cerr << "Invalid map format: too many inputs in one line\n";
-			throw std::invalid_argument("Invalid format");
+			throw std::invalid_argument("Invalid map format: too many inputs in one line");
 		}
 
 		int start, end;
 		double dist;
 
 		if (!std::isdigit(tokens[0][0]) || !std::isdigit(tokens[1][0])) {
-			std::cerr << "Invalid map format: ID must be integers\n";
-			throw std::invalid_argument("Invalid ID format");
+			throw std::invalid_argument("Invalid map format: ID must be integers");
 		}
 
 		start = std::stoi(tokens[0]);
 		end = std::stoi(tokens[1]);
 
 		if (tokens[0].length() > 7 || tokens[1].length() > 7) {
-			std::cerr << "Invalid map format: ID is too large\n";
-			throw std::invalid_argument("ID too large");
+			throw std::invalid_argument("Invalid map format: ID is too large");
 		}
 
 		// 例外を投げる
@@ -57,8 +54,7 @@ std::vector<edge_t> validate_map_format(const std::string& input_map) {
 			validated_data.push_back({start, end, dist});
 			added_edges.insert({start, end});
 		} else {
-			std::cerr << "Invalid map format: same IDs exist\n";
-			throw std::invalid_argument("Duplicate edge");
+			throw std::invalid_argument("Invalid map format: same IDs exist");
 		}
 	}
 	return validated_data;
@@ -67,8 +63,7 @@ std::vector<edge_t> validate_map_format(const std::string& input_map) {
 std::vector<edge_t> load_map(const std::string& filename) {
 	std::ifstream file(filename);
 	if (!file.is_open()) {
-		std::cerr << "Error: File '" << filename << "' not found.\n";
-		throw std::runtime_error("File not found");
+		throw std::runtime_error(filename+"File not found");
 	}
 
 	std::string lines, line;
