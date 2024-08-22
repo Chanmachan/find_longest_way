@@ -4,6 +4,21 @@
 #include <iostream>
 #include "longest_way.hpp"
 
+//// 実行速度の目安
+// 5行
+// real    0m0.043s
+// user    0m0.003s
+// sys     0m0.021s
+// 150行
+// real    0m3.172s
+// user    0m3.147s
+// sys     0m0.008s
+// 178行
+// real    15m15.551s
+// user    15m15.446s
+// sys     0m0.037s
+
+
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
 		std::cerr << "Error: one input file needed\n";
