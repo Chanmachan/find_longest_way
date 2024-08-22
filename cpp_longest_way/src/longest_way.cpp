@@ -94,3 +94,46 @@ void write_graph_to_dot(const Graph& graph, const std::string& filename) {
 
 	boost::write_graphviz(dot_file, graph, boost::default_writer(), writer);
 }
+
+// DFSを実行するための補助関数
+void dfs(const Graph& graph, Vertex current, std::set<Vertex>& visited, double current_length, std::vector<Vertex>& current_path, double& max_length, std::vector<Vertex>& longest_path) {
+	visited.insert(current);
+	current_path.push_back(current);
+
+	bool is_leaf = true;
+	// 変数名を変更
+	auto edges = out_edges(current, graph);
+	for (auto ei = edges.first; ei != edges.second; ++ei) {
+		Vertex neighbor = target(*ei, graph);
+		if (visited.find(neighbor) == visited.end()) {
+			is_leaf = false;
+			double weight = get(boost::edge_weight, graph, *ei);
+			dfs(graph, neighbor, visited, current_length + weight, current_path, max_length, longest_path);
+		}
+	}
+
+	if (is_leaf && current_length > max_length) {
+		max_length = current_length;
+		longest_path = current_path;
+	}
+
+	visited.erase(current);
+	current_path.pop_back();
+}
+
+// グラフの全ノードからDFSを開始して最長パスを見つける
+std::pair<std::vector<Vertex>, double> find_longest_path_in_graph(const Graph& graph) {
+	double max_length = 0;
+	std::vector<Vertex> longest_path;
+
+	std::set<Vertex> visited;
+	std::vector<Vertex> current_path;
+	VertexIter vi, vi_end;
+	for (boost::tie(vi, vi_end) = vertices(graph); vi != vi_end; ++vi) {
+		visited.clear();
+		current_path.clear();
+		dfs(graph, *vi, visited, 0, current_path, max_length, longest_path);
+	}
+
+	return {longest_path, max_length};
+}
