@@ -1,7 +1,7 @@
+import argparse
 import random
 
-
-def generate_graph_data(num_nodes, num_edges, max_weight=10.0):
+def generate_graph_data(num_nodes, num_edges, max_weight):
     edges = set()
     while len(edges) < num_edges:
         start = random.randint(1, num_nodes)
@@ -15,5 +15,16 @@ def generate_graph_data(num_nodes, num_edges, max_weight=10.0):
             file.write(f"{start}, {end}, {weight}\n")
 
 
-# Parameters: number of nodes, number of edges, maximum weight of edges
-generate_graph_data(80, 160, 10.0)
+def main():
+    parser = argparse.ArgumentParser(description="Generate graph data for testing.")
+    parser.add_argument("num_nodes", type=int, help="Number of nodes in the graph")
+    parser.add_argument("num_edges", type=int, help="Number of edges in the graph")
+    parser.add_argument("max_weight", type=float, help="Maximum weight for an edge")
+
+    args = parser.parse_args()
+
+    # Call the function with arguments from the command line
+    generate_graph_data(args.num_nodes, args.num_edges, args.max_weight)
+
+if __name__ == "__main__":
+    main()
