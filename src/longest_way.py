@@ -20,7 +20,8 @@ def create_graph(validated_data):
 def draw_graph(graph):
     pos = nx.spring_layout(graph)
     edge_labels = nx.get_edge_attributes(graph, 'weight')
-    nx.draw(graph, pos, with_labels=True, node_color='skyblue', node_size=2000, edge_color='k', linewidths=1, font_size=15)
+    nx.draw(graph, pos, with_labels=True, node_color='skyblue', node_size=2000, edge_color='k', linewidths=1,
+            font_size=15)
     nx.draw_networkx_edge_labels(graph, pos, edge_labels={e: f"{w:.2f}" for e, w in edge_labels.items()})
     plt.show()
 
@@ -104,6 +105,21 @@ def load_map(filename):
         return None
 
 
+## 実行速度の目安
+# node: 4, edge: 5
+# real: 0m0.545s
+# user: 0m0.290s
+# sys: 0m0.070s
+# node: 20, edge: 80
+# real: 0m8.497s
+# user: 0m8.240s
+# sys: 0m0.090s
+# node: 80, edge: 160
+# real: 0m55.058s
+# user: 0m54.410s
+# sys: 0m0.330s
+
+
 def main():
     debug_mode = False
     if '--debug' in sys.argv:
@@ -131,4 +147,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
